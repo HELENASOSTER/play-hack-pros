@@ -2,39 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* PLAY HACK Design System - Hack-style gaming interface */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core hack theme */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 6.7%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 6.7%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary orange accent */
+    --primary: 22 100% 49%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 6.7%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 6.7%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 22 100% 49%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 100% 42%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 13.3%;
+    --input: 0 0% 13.3%;
+    --ring: 22 100% 49%;
+
+    /* Status colors */
+    --status-pagando: 145 100% 39%;
+    --status-empatando: 48 100% 50%;
+    --status-tomando: 0 100% 42%;
+
+    /* Gaming effects */
+    --glow-primary: 0 0 20px hsl(var(--primary) / 0.5);
+    --glow-success: 0 0 20px hsl(var(--status-pagando) / 0.5);
+    --shadow-hack: 0 4px 20px hsl(0 0% 0% / 0.7);
 
     --radius: 0.5rem;
 
@@ -100,6 +110,101 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  /* Gaming UI Components */
+  .hack-glow {
+    box-shadow: var(--glow-primary);
+  }
+
+  .hack-glow-success {
+    box-shadow: var(--glow-success);
+  }
+
+  .hack-button {
+    @apply bg-primary text-primary-foreground font-bold py-3 px-6 rounded-lg;
+    @apply transition-all duration-200 hover:scale-105 active:scale-95;
+    @apply shadow-lg hover:shadow-xl;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    border: 1px solid hsl(var(--primary) / 0.5);
+  }
+
+  .hack-card {
+    @apply bg-card border border-border rounded-lg p-4;
+    @apply transition-all duration-200 hover:border-primary/50;
+    background: linear-gradient(135deg, hsl(var(--card)), hsl(var(--card) / 0.9));
+    box-shadow: var(--shadow-hack);
+  }
+
+  .status-badge {
+    @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+  }
+
+  .status-pagando {
+    @apply bg-green-500 text-white;
+    background: hsl(var(--status-pagando));
+    box-shadow: 0 0 10px hsl(var(--status-pagando) / 0.5);
+  }
+
+  .status-empatando {
+    @apply bg-yellow-500 text-black;
+    background: hsl(var(--status-empatando));
+    box-shadow: 0 0 10px hsl(var(--status-empatando) / 0.5);
+  }
+
+  .status-tomando {
+    @apply bg-red-500 text-white;
+    background: hsl(var(--status-tomando));
+    box-shadow: 0 0 10px hsl(var(--status-tomando) / 0.5);
+  }
+
+  .progress-bar {
+    @apply h-2 rounded-full overflow-hidden;
+    background: hsl(var(--muted));
+  }
+
+  .progress-fill {
+    @apply h-full transition-all duration-1000 ease-out;
+    background: linear-gradient(90deg, hsl(var(--status-pagando)), hsl(var(--status-pagando) / 0.7));
+    box-shadow: 0 0 10px hsl(var(--status-pagando) / 0.7);
+  }
+
+  .game-tile {
+    @apply hack-card cursor-pointer min-w-[120px] text-center;
+    @apply transition-all duration-200 hover:scale-105;
+  }
+
+  .game-tile:disabled {
+    @apply opacity-50 cursor-not-allowed hover:scale-100;
+  }
+
+  .notification-toast {
+    @apply fixed top-4 right-4 z-50 max-w-sm;
+    @apply hack-card bg-primary text-primary-foreground;
+    @apply animate-in slide-in-from-right duration-300;
+  }
+
+  .iframe-container {
+    @apply fixed inset-0 z-50 bg-black/95 flex flex-col;
+  }
+
+  .category-modal {
+    @apply fixed inset-0 z-40 bg-black/90 flex flex-col;
+    @apply animate-in fade-in duration-300;
+  }
+
+  .hack-input {
+    @apply bg-input border border-border rounded-lg px-4 py-2;
+    @apply text-foreground placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+
+  .warning-banner {
+    @apply border-l-4 border-yellow-500 bg-yellow-500/10 p-4;
+    @apply text-yellow-500;
   }
 }
